@@ -2,22 +2,20 @@
   "0 debug pnpm:scope": {
     "selected": 1
   },
-  "1 info pnpm": {
-    "err": {
-      "name": "Error",
-      "message": "not found: upadte",
-      "code": "ENOENT",
-      "stack": "Error: not found: upadte\n    at getNotFoundError (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:47811:51)\n    at Function.whichSync [as sync] (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:47888:13)\n    at getCommandAbsolutePathSync (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:49453:44)\n    at Object.default_1 [as default] (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:49462:32)\n    at /Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:129798:34"
-    }
-  },
-  "2 error pnpm": {
-    "code": "ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL",
-    "prefix": "/Users/alain/DEV/template",
+  "1 error pnpm": {
+    "code": "ELIFECYCLE",
+    "errno": "ENOENT",
+    "syscall": "spawn",
+    "file": "sh",
+    "pkgid": "template@1.0.0",
+    "stage": "dev",
+    "script": "rollup -c -w --configPlugin typescript",
+    "pkgname": "template",
     "err": {
       "name": "pnpm",
-      "message": "not found: upadte",
-      "code": "ERR_PNPM_RECURSIVE_EXEC_FIRST_FAIL",
-      "stack": "Error: not found: upadte\n    at getNotFoundError (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:47811:51)\n    at Function.whichSync [as sync] (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:47888:13)\n    at getCommandAbsolutePathSync (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:49453:44)\n    at Object.default_1 [as default] (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:49462:32)\n    at /Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.16.0/node_modules/pnpm/dist/pnpm.cjs:129798:34"
+      "message": "template@1.0.0 dev: `rollup -c -w --configPlugin typescript`\nspawn ENOENT",
+      "code": "ELIFECYCLE",
+      "stack": "pnpm: template@1.0.0 dev: `rollup -c -w --configPlugin typescript`\nspawn ENOENT\n    at ChildProcess.<anonymous> (/Users/alain/pnpm-global/5/node_modules/.pnpm/pnpm@6.26.1/node_modules/pnpm/dist/pnpm.cjs:91958:22)\n    at ChildProcess.emit (events.js:400:28)\n    at maybeClose (internal/child_process.js:1058:16)\n    at Process.ChildProcess._handle.onexit (internal/child_process.js:293:5)"
     }
   }
 }

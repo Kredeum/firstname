@@ -1,0 +1,10 @@
+node_modules
+.env
+.lh
+.favorties.json
+
+#Hardhat files
+cache
+artifacts
+types
+coverage

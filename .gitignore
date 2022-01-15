@@ -2,7 +2,7 @@ node_modules
 .env
 .lh
 .favorites.json
-docs/build
+#docs/build
 
 #Hardhat files
 cache

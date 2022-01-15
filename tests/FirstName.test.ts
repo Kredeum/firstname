@@ -1,7 +1,8 @@
+import type { FeeData, TransactionReceipt } from "@ethersproject/abstract-provider";
+
 import { expect } from "chai";
 import { ethers, deployments } from "hardhat";
 import { Signer, Contract, BigNumber } from "ethers";
-import { FeeData, TransactionReceipt } from "@ethersproject/abstract-provider";
 
 describe("FirstName", function () {
   let signer: Signer;

@@ -4,11 +4,35 @@ import resolve from "@rollup/plugin-node-resolve";
 import livereload from "rollup-plugin-livereload";
 import { terser } from "rollup-plugin-terser";
 import css from "rollup-plugin-css-only";
+import json from "@rollup/plugin-json";
 
 import typescript from "@rollup/plugin-typescript";
 import sveltePreprocess from "svelte-preprocess";
 
-const production = !process.env.ROLLUP_WATCH;
+import replace from "@rollup/plugin-replace";
+import dotenv from "dotenv";
+import findupSync from "findup-sync";
+
+if (!process.env.ENVIR) {
+  dotenv.config({ path: findupSync(".env") || "" });
+  if (!process.env.ENVIR) {
+    throw new Error("HARDHAT : ENV variable ENVIR not set!");
+  }
+}
+
+const production = process.env.ENVIR == "PROD";
+console.log("production", production);
+
+const envKeys = () => {
+  return Object.keys(process.env).reduce(
+    (envValues, envValue) => ({
+      ...envValues,
+      [`process.env.${envValue}`]: JSON.stringify(process.env[envValue])
+    }),
+    {}
+  );
+};
+// console.log("envKeys ~ envKeys", envKeys());
 
 function serve() {
   let server;
@@ -31,54 +55,58 @@ function serve() {
   };
 }
 
-export default {
-  input: "./svelte/main.ts",
-  output: {
-    sourcemap: !production,
-    format: "iife",
-    name: "app",
-    file: "dapp/build/bundle.js"
-  },
-  plugins: [
-    svelte({
-      preprocess: sveltePreprocess({ sourceMap: !production }),
-      compilerOptions: {
-        // enable run-time checks when not in production
-        dev: !production
+const toRollupConfig = function () {
+  return {
+    input: "./svelte/main.ts",
+    output: {
+      sourcemap: !production,
+      format: "iife",
+      name: "app",
+      file: "dapp/build/bundle.js"
+    },
+    plugins: [
+      svelte({
+        preprocess: sveltePreprocess({ sourceMap: !production }),
+        compilerOptions: {
+          dev: !production
+        }
+      }),
+
+      css({ output: "bundle.css" }),
+
+      replace({
+        preventAssignment: true,
+        values: envKeys()
+      }),
+
+      typescript({
+        sourceMap: !production,
+        inlineSources: !production
+      }),
+
+      resolve({
+        browser: true,
+        dedupe: ["svelte"]
+      }),
+      json(),
+      commonjs(),
+
+      !production && serve(),
+
+      !production && livereload("dapp"),
+
+      production && terser()
+    ],
+    watch: {
+      clearScreen: false
+    },
+    onwarn: function (warning) {
+      if (warning.code === "THIS_IS_UNDEFINED" || warning.code === "CIRCULAR_DEPENDENCY") {
+        return;
       }
-    }),
-    // we'll extract any component CSS out into
-    // a separate file - better for performance
-    css({ output: "bundle.css" }),
-
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration -
-    // consult the documentation for details:
-    // https://github.com/rollup/plugins/tree/master/packages/commonjs
-    resolve({
-      browser: true,
-      dedupe: ["svelte"]
-    }),
-    commonjs(),
-    typescript({
-      sourceMap: !production,
-      inlineSources: !production
-    }),
-
-    // In dev mode, call `npm run start` once
-    // the bundle has been generated
-    !production && serve(),
-
-    // Watch the `dapp` directory and refresh the
-    // browser on changes when not in production
-    !production && livereload("dapp"),
-
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser()
-  ],
-  watch: {
-    clearScreen: false
-  }
+      console.warn(warning.message);
+    }
+  };
 };
+
+export default [toRollupConfig()];

@@ -1,31 +1,50 @@
-<script>
-  let name = "tennis.eth";
-  let url;
-  let collection;
+<script lang="ts">
+  import type { Web3Provider, EnsProvider, EnsResolver, JsonRpcSigner } from "@ethersproject/providers";
+  import { providers, BigNumber } from "ethers";
+  import { onMount } from "svelte";
+  import { namehash } from "@ethersproject/hash";
 
-  const openWindow = () => (url = window.open(url, "_blank"));
+  let name = "tennis3.eth";
 
-  $: switch (name) {
-    case "tennis.eth":
-      collection = true;
-      url = "https://testnets.opensea.io/collection/tennis-v2";
-      break;
-    case "djoko.tennis.eth":
-      url = "https://testnets.opensea.io/assets/0xd750a97a4d742f142c18c67ccbb393ec6200ca04/1";
-      break;
-    case "nadal.tennis.eth":
-      url = "https://testnets.opensea.io/assets/0xd750a97a4d742f142c18c67ccbb393ec6200ca04/2";
-      break;
-    case "roger.tennis.eth":
-      url = "https://testnets.opensea.io/assets/0xd750a97a4d742f142c18c67ccbb393ec6200ca04/3";
-      break;
-    default:
-      collection = false;
-      url = "";
-  }
+  let url: string;
+  let tokenId: string;
+  let address: string;
+
+  let ensProvider: EnsProvider;
+  let ensResolver: EnsResolver;
+
+  const gotoCollection = () => window.open(url, "_blank");
+
+  const gotoNFT = () => window.open(`https://testnets.opensea.io/assets/${address}/${tokenId}`, "_blank");
+
+  $: resolve(name);
+
+  const resolve = async (name: string): Promise<void> => {
+    url = "";
+    address = "";
+    tokenId = "";
+
+    if (!ensProvider) {
+      try {
+        ensProvider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`);
+      } catch (e) {
+        console.error("NO ENS found");
+      }
+    }
+    if (ensProvider) {
+      ensResolver = await ensProvider.getResolver(name);
+      if (ensResolver) {
+        address = await ensResolver.getAddress(60);
+        tokenId = await ensResolver.getText("notice");
+        url = await ensResolver.getText("url");
+
+        console.log("resolve", name, "=>", url, address, tokenId);
+      }
+    }
+  };
 </script>
 
-<body>
+<main>
   <h1>FirstName NFTs</h1>
 
   <div>
@@ -33,10 +52,55 @@
   </div>
 
   <div>
-    {#if collection}
-      <button on:click={openWindow}>Goto Collection</button>
-    {:else if url}
-      <button on:click={openWindow}>Goto NFT</button>
-    {/if}
+    <p>
+      <button disabled={!url} on:click={gotoCollection}>GoTo URL</button>
+      {url ? `${url} (ens url field)` : ""}
+    </p>
+    <p>
+      <button disabled={!(address && tokenId)} on:click={gotoNFT}>GoTo NFT</button>
+      {address && tokenId ? `${address} / ${tokenId} (ens address/notice fields)` : ""}
+    </p>
   </div>
-</body>
+
+  <hr />
+
+  <p>You can enter firstname of these 3 NFTs : roger / djoko / nadal</p>
+  <p>... with the lastname of the 'Top3 Tennis Collection' : tennis3.eth</p>
+
+  <ul>
+    <li>roger.tennis3.eth</li>
+    <li>djoko.tennis3.eth</li>
+    <li>nadal.tennis3.eth</li>
+    <li>tennis3.eth</li>
+  </ul>
+</main>
+
+<style>
+  main {
+    padding: 1em;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    color: #ff3e00;
+    font-size: 4em;
+    font-weight: 100;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  button:disabled {
+    background-color: #e7e7e7;
+    color: white;
+  }
+
+  @media (min-width: 640px) {
+    main {
+      max-width: none;
+    }
+  }
+</style>

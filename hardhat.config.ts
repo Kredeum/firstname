@@ -26,10 +26,11 @@ if (!process.env.INFURA_API_KEY) {
 }
 
 const accounts = [
-  process.env.PRIVATE_KEY_TEST_0 || "",
-  process.env.PRIVATE_KEY_TEST_1 || "",
-  process.env.PRIVATE_KEY_TEST_2 || "",
-  process.env.PRIVATE_KEY_TEST_3 || ""
+  process.env.PRIVATE_KEY_0_DEPLOY || "",
+  process.env.PRIVATE_KEY_1_TEST || "",
+  process.env.PRIVATE_KEY_2_TEST || "",
+  process.env.PRIVATE_KEY_3_TEST || "",
+  process.env.PRIVATE_KEY_4_TEST || ""
 ];
 
 const admin = process.env.PUBLIC_KEY || "";
@@ -69,11 +70,11 @@ const hardhatUserConfig: HardhatUserConfig = {
       },
       accounts: [
         {
-          privateKey: process.env.PRIVATE_KEY_TEST_0 || "",
+          privateKey: process.env.PRIVATE_KEY_1_TEST || "",
           balance: "100000000000000000000"
         },
         {
-          privateKey: process.env.PRIVATE_KEY_TEST_1 || "",
+          privateKey: process.env.PRIVATE_KEY_2_TEST || "",
           balance: "100000000000000000000"
         }
       ],
@@ -193,8 +194,7 @@ const hardhatUserConfig: HardhatUserConfig = {
   },
   typechain: {
     outDir: "types",
-    target: "ethers-v5",
-    externalArtifacts: ["abis/*.json"]
+    target: "ethers-v5"
   },
   paths: {
     sources: "contracts",

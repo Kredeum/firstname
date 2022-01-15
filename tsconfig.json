@@ -1,6 +1,15 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
 
-  "include": ["svelte/**/*"],
-  "exclude": ["node_modules/*", "__sapper__/*", "dapp/*"]
+  "compilerOptions": {
+    "baseUrl": "./",
+    "rootDir": "./",
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "esModuleInterop": true,
+    "importsNotUsedAsValues": "remove"
+  },
+
+  "include": ["svelte/*.svelte", "svelte/*.ts"],
+  "exclude": ["node_modules/*", "dapp/*"]
 }

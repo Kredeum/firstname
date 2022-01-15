@@ -34,7 +34,7 @@ function serve() {
 export default {
   input: "./svelte/main.ts",
   output: {
-    sourcemap: true,
+    sourcemap: !production,
     format: "iife",
     name: "app",
     file: "dapp/build/bundle.js"

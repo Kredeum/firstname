@@ -11,5 +11,5 @@
   },
 
   "include": ["svelte/*.svelte", "svelte/*.ts"],
-  "exclude": ["node_modules/*", "dapp/*"]
+  "exclude": ["node_modules/*", "docs/*"]
 }

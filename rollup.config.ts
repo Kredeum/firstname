@@ -13,10 +13,10 @@ import replace from "@rollup/plugin-replace";
 import dotenv from "dotenv";
 import findupSync from "findup-sync";
 
-if (!process.env.ENVIR) {
+if (!process.env.INFURA_API_KEY) {
   dotenv.config({ path: findupSync(".env") || "" });
-  if (!process.env.ENVIR) {
-    throw new Error("HARDHAT : ENV variable ENVIR not set!");
+  if (!process.env.INFURA_API_KEY) {
+    throw new Error("HARDHAT : ENV variable INFURA_API_KEY not set!");
   }
 }
 
@@ -62,12 +62,13 @@ const toRollupConfig = function () {
       sourcemap: !production,
       format: "iife",
       name: "app",
-      file: "dapp/build/bundle.js"
+      file: "docs/build/bundle.js"
     },
     plugins: [
       svelte({
         preprocess: sveltePreprocess({ sourceMap: !production }),
         compilerOptions: {
+          customElement: false,
           dev: !production
         }
       }),
@@ -93,7 +94,7 @@ const toRollupConfig = function () {
 
       !production && serve(),
 
-      !production && livereload("dapp"),
+      !production && livereload("docs"),
 
       production && terser()
     ],

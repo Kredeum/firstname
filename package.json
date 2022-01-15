@@ -5,7 +5,7 @@
   "scripts": {
     "build": "rollup -c --configPlugin typescript",
     "dev": "rollup -c -w --configPlugin typescript",
-    "start": "sirv dapp --no-clear",
+    "start": "sirv docs --no-clear",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
   "devDependencies": {

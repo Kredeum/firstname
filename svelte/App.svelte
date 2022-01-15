@@ -24,22 +24,26 @@
     address = "";
     tokenId = "";
 
-    if (!ensProvider) {
-      try {
-        ensProvider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`);
-      } catch (e) {
-        console.error("NO ENS found");
+    try {
+      if (!ensProvider) {
+        try {
+          ensProvider = new providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${process.env.INFURA_API_KEY}`);
+        } catch (e) {
+          console.error("NO ENS found");
+        }
       }
-    }
-    if (ensProvider) {
-      ensResolver = await ensProvider.getResolver(name);
-      if (ensResolver) {
-        address = await ensResolver.getAddress(60);
-        tokenId = await ensResolver.getText("notice");
-        url = await ensResolver.getText("url");
+      if (ensProvider) {
+        ensResolver = await ensProvider.getResolver(name);
+        if (ensResolver) {
+          address = await ensResolver.getAddress(60);
+          tokenId = await ensResolver.getText("notice");
+          url = await ensResolver.getText("url");
 
-        console.log("resolve", name, "=>", url, address, tokenId);
+          console.log("resolve", name, "=>", url, address, tokenId);
+        }
       }
+    } catch (e) {
+      console.log("ERROR resolve", e);
     }
   };
 </script>
@@ -47,6 +51,12 @@
 <main>
   <h1>FirstName NFTs</h1>
 
+  <p><i>Get access to your favorite NFTs with ease, using simple names powered by ENS Domains.</i></p>
+  <p><i>Give FirstName to your NFTs and LastName to your Collections !</i></p>
+  <p>Have a try with this Collection of Top3 Tennis Champions</p>
+
+  <hr />
+  <br />
   <div>
     <input bind:value={name} />
   </div>
@@ -69,10 +79,16 @@
 
   <ul>
     <li>roger.tennis3.eth</li>
-    <li>djoko.tennis3.eth</li>
+    <li>djoko.tennis3.eth (no url settled)</li>
     <li>nadal.tennis3.eth</li>
     <li>tennis3.eth</li>
   </ul>
+
+  <hr />
+
+  <p>ToDo: Automaticly register these ENS Domains while Minting NFTs !</p>
+  <p><i>Soon on Kredeum NFTs Factory <a href="https://app.kredeum.com">https://app.kredeum.com</a> ... </i></p>
+  <p>zapaz.eth</p>
 </main>
 
 <style>

@@ -1,7 +1,7 @@
 {
-  "name": "svelte-app",
-  "version": "1.0.0",
-  "private": true,
+  "name": "firstname",
+  "version": "1.0.1",
+  "author": "zapaz.eth",
   "scripts": {
     "build": "rollup -c --configPlugin typescript",
     "dev": "rollup -c -w --configPlugin typescript",

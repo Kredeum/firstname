@@ -4,7 +4,9 @@
   import { onMount } from "svelte";
   import { namehash } from "@ethersproject/hash";
 
-  let name = "tennis3.eth";
+  let name: string;
+  let firstName: string;
+  let lastName: string = "tennis3";
 
   let url: string;
   let tokenId: string;
@@ -17,9 +19,15 @@
 
   const gotoNFT = () => window.open(`https://testnets.opensea.io/assets/${address}/${tokenId}`, "_blank");
 
-  $: resolve(name);
+  $: resolve(firstName, lastName);
 
-  const resolve = async (name: string): Promise<void> => {
+  const resolve = async (firstName: string, lastName: string): Promise<void> => {
+    if (firstName) {
+      name = firstName + "." + lastName + ".eth";
+    } else {
+      name = lastName + ".eth";
+    }
+
     url = "";
     address = "";
     tokenId = "";
@@ -58,17 +66,18 @@
   <hr />
   <br />
   <div>
-    <input bind:value={name} />
+    <input placeholder="firstName" bind:value={firstName} />
+    <input placeholder="lastName" bind:value={lastName} />
   </div>
 
   <div>
     <p>
       <button disabled={!url} on:click={gotoCollection}>GoTo URL</button>
-      {url ? `${url} (ens url field)` : ""}
+      ({name} ens url) => {url ? `${url}` : ""}
     </p>
     <p>
       <button disabled={!(address && tokenId)} on:click={gotoNFT}>GoTo NFT</button>
-      {address && tokenId ? `${address} / ${tokenId} (ens address/notice fields)` : ""}
+      ({name} ens address/tokenId) => {address && tokenId ? `${address} / ${tokenId}` : ""}
     </p>
   </div>
 
@@ -78,17 +87,15 @@
   <p>... with the lastname of the 'Top3 Tennis Collection' : tennis3.eth</p>
 
   <ul>
-    <li>roger.tennis3.eth</li>
-    <li>djoko.tennis3.eth (no url settled)</li>
-    <li>nadal.tennis3.eth</li>
-    <li>tennis3.eth</li>
+    <li>tennis3</li>
+    <li>roger tennis3</li>
+    <li>djoko tennis3 (no url settled)</li>
+    <li>nadal tennis3</li>
   </ul>
 
   <hr />
 
-  <p>ToDo: Automaticly register these ENS Domains while Minting NFTs !</p>
-  <p><i>Soon on Kredeum NFTs Factory <a href="https://app.kredeum.com">https://app.kredeum.com</a> ... </i></p>
-  <p>zapaz.eth</p>
+  <p>Todo: Automaticly register these ENS Domains while Minting NFTs !</p>
 </main>
 
 <style>
